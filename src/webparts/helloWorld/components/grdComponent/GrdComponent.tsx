@@ -52,26 +52,12 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
     private async loadDefaultGrid() {
 
         const _util = new Utility();
-        console.log('A');
-
-        // this._getListData().then((response) => {
-        //     var options: Array<IDropdownOption> = new Array<IDropdownOption>();
-        //     response.value.map((list: IODataList) => {
-        //       options.push({ key: list.Id, text: list.Title });
-        //     });
-
-        //     resolve(options);
-        //   } 
-
         const _data = await _util.loadAsyncGridDocumentLibrary(0);
 
-        _util.loadGridDocumentLibrary(0).then((response) => {
-
-            console.log(response);
-        });
-
-        const tset = "0";
-
+        //Promise sample (working)
+        // _util.loadGridDocumentLibrary(0).then((response) => {
+        //     console.log(response);
+        // });
     }
 
 
