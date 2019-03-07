@@ -8,67 +8,184 @@ import { ConsoleListener, Web, Logger, LogLevel, ODataRaw } from "sp-pnp-js";
 import { Dropdown, IDropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import {
-    SPHttpClient,
-    SPHttpClientResponse,
-    SPHttpClientConfiguration
+  SPHttpClient,
+  SPHttpClientResponse,
+  SPHttpClientConfiguration
 } from "@microsoft/sp-http";
 import Utility from './../../lib/Utility';
+
+///////////////////////////////////////////////////////////
+//https://sharepoint.github.io/sp-dev-fx-controls-react/ 
+//////////////////////////////////////////////////////////
+
+//1. npm install @pnp/spfx-controls-react --save --save-exact
+//2. Configure
+// Once the package is installed, you will have to configure the resource file of 
+// the property controls to be used in your project. You can do this by opening the config/config.json 
+// and adding the following line to the localizedResources property:
+// "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+
+import { ListView, IViewField, SelectionMode, GroupOrder, IGrouping } from "@pnp/spfx-controls-react/lib/ListView";
+
+
+
+///////////////////////////////////////////////////////////
+//context menu
+///////////////////////////////////////////////////////////
+import { Layer, IconButton, IButtonProps } from 'office-ui-fabric-react';
+import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import ContextualMenuListView from './ContextualMenuListView';
+import { IECBProps, IECBState } from './IECBProps';
+///////////////////////////////////////////////////////////
+//context menu
+///////////////////////////////////////////////////////////
+
 
 
 export default class GrdComponent extends React.Component<IgridProps, IGrdState, any> {
 
 
-    public constructor(props: IgridProps, state: IGrdState) {
+  constructor(props: IgridProps) {
+    super(props);
 
-        super(props);
-        this.state = {
-            ID: 0,
-            disabled: false,
-            checked: false,
-            drpOptions: [],
-            Contact_x0020_Name: "",
-            CSN_x0020__x0023_: "",
-            Ship_x0020_To_x0020_Address: "",
-            items: [
-                {
-                    Id: 0,
-                    Company: "",
-                    Contact: "",
-                    Country: null,
-                    fileContent: null
-                } as IItemGrd
-            ] as IItemGrd[],
-            editItem: { Company: '', Contact: '', Country: { Id: 0, CountryName: '' }, Id: 0, fileContent: null, isEditable: false }
-        } as IGrdState;
-
-
-    }
-
-
-    public componentDidMount() {
-        this.loadDefaultGrid();
-    }
-
-    private async loadDefaultGrid() {
-
-        const _util = new Utility();
-        const _data = await _util.loadAsyncGridDocumentLibrary(0);
-
-        //Promise sample (working)
-        // _util.loadGridDocumentLibrary(0).then((response) => {
-        //     console.log(response);
-        // });
-    }
+    this.state = {
+      disabled: false,
+      checked: false,
+      selectedItem: null,
+      hideDialog: true,
+      showModal: false,
+      drpOptions: [],
+      ID: 0,
+      Contact_x0020_Name: "",
+      CSN_x0020__x0023_: "",
+      Ship_x0020_To_x0020_Address: "",
+      items: [
+        {
+          Id: 0,
+          Company: "",
+          Contact: "",
+          Country: null,
+          fileContent: null
+        } as IItemGrd
+      ] as IItemGrd[],
+      editItem: { Company: '', Contact: '', Country: { Id: 0, CountryName: '' }, Id: 0, fileContent: null, isEditable: false }
+    } as IGrdState;
+  }
 
 
-    public render(): React.ReactElement<IgridProps> {
-        return (
-            <div>
+  private _getSelection(items: any[]) {
+    console.log('Selected items:', items);
+  }
+
+
+  public componentDidMount() {
+    this.loadDefaultGrid();
+  }
+
+
+  private async loadDefaultGrid() {
+
+    const _util = new Utility();
+    const _data = await _util.loadAsyncGridDocumentLibrary(0);
+    const _restData = await _util.loadRestGridDocumentLibrary(0, this.props.context);
+
+    //Promise sample (working)
+    // _util.loadGridDocumentLibrary(0).then((response) => {
+    //     console.log(response);
+    // });
+
+    this.setState({
+      items: _data.map((i) => ({
+        ID: i.Id,
+        Contact_x0020_Name: i.Contact_x0020_Name,
+        CSN_x0020__x0023_: i.CSN_x0020__x0023_,
+        Ship_x0020_To_x0020_Address: i.Ship_x0020_To_x0020_Address,
+        fileContent: null,
+        isEditable: false
+      }))
+    });
+
+  }
+
+  // private fetchDatafromSharePointList() {
+  //   let siteUrl = this.props.context.pageContext.web.absoluteUrl;
+
+  //   this.props.context.spHttpClient
+  //     .get(
+  //       `${
+  //         this.props.context.pageContext.web.absoluteUrl
+  //       }/_api/lists/GetByTitle('CANISTER ORDER FORM PNP')/items`,
+  //       SPHttpClient.configurations.v1
+  //     )
+  //     .then((response: SPHttpClientResponse) => {
+  //       response.json().then((responseJSON: any) => {
+  //         console.log("print - " + responseJSON.value[0]);
+
+  //       });
+  //     });
+  // }
+
+  public render(): React.ReactElement<IgridProps> {
+
+    const { disabled, checked, drpOptions, editItem, items } = this.state;
+
+    const viewFields: IViewField[] = [
+      {
+        name: 'Contact_x0020_Name',
+        displayName: 'Contact Name',
+        sorting: true,
+        maxWidth: 280
+      },
+      {
+        name: "",
+        sorting: false,
+        maxWidth: 40,
+        render: (rowitem: IgridProps) => {
+          const element: React.ReactElement<IECBProps> = React.createElement(
+            ContextualMenuListView
+          );
+          return element;
+        }
+      },
+      {
+        name: 'CSN_x0020__x0023_',
+        displayName: 'CSN #',
+        sorting: true,
+        maxWidth: 80
+      },
+      {
+        name: 'Ship_x0020_To_x0020_Address',
+        displayName: "Ship Address",
+        sorting: true,
+        maxWidth: 180
+      }
+    ];
+
+    const groupByFields: IGrouping[] = [
+      {
+        name: "CSN_x0020__x0023_",
+        order: GroupOrder.descending
+      }
+    ];
 
 
 
 
-            </div>
-        );
-    }
+    return (
+      <div>
+        Hi
+                <ListView
+          items={items}
+          viewFields={viewFields}
+          iconFieldName="ServerRelativeUrl"
+          compact={true}
+          selectionMode={SelectionMode.multiple}
+          selection={this._getSelection}
+          showFilter={true}
+          defaultFilter=""
+          filterPlaceHolder="Search..."
+          groupByFields={groupByFields} />
+      </div>
+    );
+  }
 }

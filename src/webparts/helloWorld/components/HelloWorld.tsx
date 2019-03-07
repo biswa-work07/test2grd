@@ -11,7 +11,7 @@ export default class HelloWorld extends React.Component<IHelloWorldProps,IHelloW
   public render(): React.ReactElement<IHelloWorldProps> {
     return (
       <div className={ styles.helloWorld }>
-       <GrdComponentTest showModal={false} context={this.props.context}></GrdComponentTest>
+       <GrdComponent showModal={false} context={this.props.context}></GrdComponent>
       </div>
     );
   }
