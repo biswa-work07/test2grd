@@ -59,6 +59,8 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
       Contact_x0020_Name: "",
       CSN_x0020__x0023_: "",
       Ship_x0020_To_x0020_Address: "",
+      editLink: "",
+      filrUrl: "",
       items: [
         {
           Id: 0,
@@ -87,29 +89,39 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
 
     const _util = new Utility();
     const _data = await _util.loadAsyncGridDocumentLibrary(0);
-    const _restData = await _util.loadRestGridDocumentLibrary(0, this.props.context);
 
-    //Promise sample (working)
-    // _util.loadGridDocumentLibrary(0).then((response) => {
-    //     console.log(response);
-    // });
+    //const _restData = await _util.loadRestGridDocumentLibrary(0, this.props.context); //working code for rest
+
+    //Working code for get by id
+    // for (let i = 0; i < _data.length; i++) {
+    //   let _fileData = await _util.getAsyncDocuments(_data[i].Id);
+    //   console.log(_fileData['File'].Name);
+    // }
+
+    //console.log(this.props.context.pageContext.web.absoluteUrl);
+
+    const urlData = _util.getOnlyRootUrl(this.props.context.pageContext.web.absoluteUrl, '/', 3);
+
 
     this.setState({
-      items: _data.map((i) => ({
-        ID: i.Id,
-        Contact_x0020_Name: i.Contact_x0020_Name,
-        CSN_x0020__x0023_: i.CSN_x0020__x0023_,
-        Ship_x0020_To_x0020_Address: i.Ship_x0020_To_x0020_Address,
+      items: _data.map((filedta) => ({
+        ID: filedta.Id,
+        Contact_x0020_Name: filedta.Contact_x0020_Name,
+        CSN_x0020__x0023_: filedta.CSN_x0020__x0023_,
+        Ship_x0020_To_x0020_Address: filedta.Ship_x0020_To_x0020_Address,
+        ServerRelativeUrl: urlData + filedta.File.ServerRelativeUrl,
         fileContent: null,
-        isEditable: false
+        isEditable: false,
+        editLink: null
       }))
     });
+
+    //console.log(this.state);
 
   }
 
   // private fetchDatafromSharePointList() {
   //   let siteUrl = this.props.context.pageContext.web.absoluteUrl;
-
   //   this.props.context.spHttpClient
   //     .get(
   //       `${
@@ -120,7 +132,6 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
   //     .then((response: SPHttpClientResponse) => {
   //       response.json().then((responseJSON: any) => {
   //         console.log("print - " + responseJSON.value[0]);
-
   //       });
   //     });
   // }

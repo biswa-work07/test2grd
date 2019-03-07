@@ -19,4 +19,6 @@ export interface IGrdState {
     items: IItemGrd[];
     pFileContent?: any;
     editItem?: IItemGrd;
+    editLink?:string;
+    ServerRelativeUrl?:string;
 }
