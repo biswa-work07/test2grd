@@ -9,15 +9,18 @@ export default class ParentComponent extends React.Component<IpatentProps, Ipare
 
     public render(): React.ReactElement<IpatentProps> {
 
-
         //const { pId } = this.state;
-        const { parentAddEditId, context } = this.props;
-
+        const { parentAddEditId, context, editCollectionItems } = this.props;
 
         return (
             <div>
                 Hi, I am Parent .
-                {parentAddEditId}
+                <br></br>Edited Items id's :
+                {editCollectionItems.map((item) => (
+                    <div><span className='indent' key={item}>{item["ID"]}</span><br></br></div>
+                ))}
+
+                <hr></hr>
             </div>
         );
     }

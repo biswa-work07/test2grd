@@ -35,6 +35,7 @@ export default class GrdComponentTest extends React.Component<IgridProps, IGrdSt
     super(props);
 
     this.state = {
+      editCollectionItems:[],
       showModal: false,
       addEditId: 0,
       disabled: false,

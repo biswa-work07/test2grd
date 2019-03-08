@@ -9,6 +9,7 @@ export interface IItemGrd {
 
 
 export interface IGrdState {
+    editCollectionItems?:any[];
     showModal:boolean;
     addEditId:number;
     disabled: boolean;
@@ -22,6 +23,6 @@ export interface IGrdState {
     pFileContent?: any;
     editItem?: IItemGrd;
     editLink?:string;
-    ServerRelativeUrl?:string;
-    
+    ServerRelativeUrl?:string; 
+    addEditButtonText?: string;   
 }

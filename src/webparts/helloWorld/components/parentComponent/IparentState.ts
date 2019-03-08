@@ -12,7 +12,7 @@ export interface ICountry {
     CountryName?: string;
 }
 
-export interface IparentState {
+export interface IparentState {    
     pId?: number;
     disabled: boolean;
     checked: boolean;

@@ -51,6 +51,8 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
     super(props);
 
     this.state = {
+      addEditButtonText: "ADD +",
+      editCollectionItems: [],
       showModal: false,
       addEditId: 0,
       disabled: false,
@@ -78,8 +80,17 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
   }
 
 
-  private _getSelection(items: any[]) {
+  private _getSelection = (items: any[]) => {
     console.log('Selected items:', items);
+    //state.items.concat(items)
+
+    //Add or Edit (IF ELSE STATEMENT)
+    //{isLoggedIn ? 'currently' : 'not'}
+
+    this.setState({ editCollectionItems: items.slice(), addEditButtonText: items.length > 0 ? "EDIT" : "ADD +" }, () => {
+      console.log(this.state);
+    });
+
   }
 
 
@@ -144,8 +155,7 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
 
 
 
-  //Open new component
-
+  //Open new component in Modal
   private OpenCommonAddEditComponentClick = (id: any): void => {
     //console.log(this.state.isAddButton);
     this.setState({ showModal: true }, () => {
@@ -153,6 +163,7 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
     });
   }
 
+  //Close Modal
   private _closeModal = (): void => {
     this.setState({ showModal: false });
   }
@@ -160,7 +171,7 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
 
   public render(): React.ReactElement<IgridProps> {
 
-    const { disabled, checked, drpOptions, editItem, items, addEditId } = this.state;
+    const { disabled, checked, drpOptions, editItem, items, addEditId, addEditButtonText, editCollectionItems } = this.state;
 
 
     //Used for grid collumn and Data component
@@ -171,17 +182,21 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
         sorting: true,
         maxWidth: 280
       },
-      {
-        name: "",
-        sorting: false,
-        maxWidth: 40,
-        render: (rowitem: IgridProps) => {
-          const element: React.ReactElement<IECBProps> = React.createElement(
-            ContextualMenuListView
-          );
-          return element;
-        }
-      },
+
+      /////////////////////////////////////
+      //Context Menu (Work)
+      /////////////////////////////////////
+      // {
+      //   name: "",
+      //   sorting: false,
+      //   maxWidth: 40,
+      //   render: (rowitem: IgridProps) => {
+      //     const element: React.ReactElement<IECBProps> = React.createElement(
+      //       ContextualMenuListView
+      //     );
+      //     return element;
+      //   }
+      // },
       {
         name: 'CSN_x0020__x0023_',
         displayName: 'CSN #',
@@ -196,17 +211,21 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
       }
     ];
 
-    const groupByFields: IGrouping[] = [
-      {
-        name: "CSN_x0020__x0023_",
-        order: GroupOrder.descending
-      }
-    ];
+
+    /////////////////////////////////////
+    //Context Menu Group By (Working)
+    /////////////////////////////////////
+    // const groupByFields: IGrouping[] = [
+    //   {
+    //     name: "CSN_x0020__x0023_",
+    //     order: GroupOrder.descending
+    //   }
+    // ];
 
 
     return (
       <div>
-        <DefaultButton secondaryText="Add + " onClick={e => this.OpenCommonAddEditComponentClick(0)} text="Add +" />
+        <DefaultButton secondaryText={addEditButtonText} onClick={e => this.OpenCommonAddEditComponentClick(0)} text={addEditButtonText} />
         <ListView
           items={items}
           viewFields={viewFields}
@@ -217,7 +236,8 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
           showFilter={true}
           defaultFilter=""
           filterPlaceHolder="Search..."
-          groupByFields={groupByFields} />
+        //groupByFields={groupByFields}
+        />
 
 
 
@@ -231,8 +251,15 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
         >
           <div className="ms-modalExample-body">
             <DefaultButton onClick={this._closeModal} text="Close" />
-            <ParentComponent context={this.props.context} parentAddEditId={this.state.addEditId}></ParentComponent>
+            <ParentComponent context={this.props.context} parentAddEditId={this.state.addEditId} editCollectionItems={editCollectionItems}   ></ParentComponent>
           </div>
+
+
+
+
+
+
+          
           <div id="subtitleId" className="ms-modalExample-body">
             <DefaultButton onClick={this._closeModal} text="Close" />
           </div>
