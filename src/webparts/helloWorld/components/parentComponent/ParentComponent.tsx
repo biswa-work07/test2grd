@@ -14,11 +14,16 @@ export default class ParentComponent extends React.Component<IpatentProps, Ipare
 
         return (
             <div>
-                Hi, I am Parent .
-                <br></br>Edited Items id's :
-                {editCollectionItems.map((item) => (
-                    <div><span className='indent' key={item}>{item["ID"]}</span><br></br></div>
-                ))}
+                <b> Hi, I am Parent .</b>
+                {
+                    editCollectionItems.length > 0 ? (
+                        editCollectionItems.map((item) => <div>Edit Mode :
+                           <span className='indent' key={item}>{item["ID"]},</span>
+                        </div>)
+                    ) : (
+                            <div>Add mode</div>
+                        )
+                }
 
                 <hr></hr>
             </div>
