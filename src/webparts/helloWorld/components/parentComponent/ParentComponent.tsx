@@ -5,6 +5,7 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import pnp from "sp-pnp-js";
 
 
+
 export default class ParentComponent extends React.Component<IpatentProps, IparentState, any> {
 
     public render(): React.ReactElement<IpatentProps> {
