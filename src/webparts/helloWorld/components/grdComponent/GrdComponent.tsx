@@ -3,9 +3,15 @@ import { IgridProps } from './IgridProps';
 import { IItemGrd, IGrdState } from './IgridState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import pnp from "sp-pnp-js";
-import { Button } from 'office-ui-fabric-react/lib/Button';
+import { Button, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ConsoleListener, Web, Logger, LogLevel, ODataRaw } from "sp-pnp-js";
 import { Dropdown, IDropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+
+import { Modal } from 'office-ui-fabric-react/lib/Modal';
+
+import ParentComponent from '../parentComponent/ParentComponent';
+
+import "../Modal.Basic.Example.scss";
 
 import {
   SPHttpClient,
@@ -24,10 +30,7 @@ import Utility from './../../lib/Utility';
 // the property controls to be used in your project. You can do this by opening the config/config.json 
 // and adding the following line to the localizedResources property:
 // "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
-
 import { ListView, IViewField, SelectionMode, GroupOrder, IGrouping } from "@pnp/spfx-controls-react/lib/ListView";
-
-
 
 ///////////////////////////////////////////////////////////
 //context menu
@@ -44,16 +47,16 @@ import { IECBProps, IECBState } from './IECBProps';
 
 export default class GrdComponent extends React.Component<IgridProps, IGrdState, any> {
 
-
   constructor(props: IgridProps) {
     super(props);
 
     this.state = {
+      showModal: false,
+      addEditId: 0,
       disabled: false,
       checked: false,
       selectedItem: null,
       hideDialog: true,
-      showModal: false,
       drpOptions: [],
       ID: 0,
       Contact_x0020_Name: "",
@@ -117,8 +120,11 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
     });
 
     //console.log(this.state);
-
   }
+
+  ////////////////////////////////////////////////////
+  //Get Sharepoint Document Librery (Working)
+  ////////////////////////////////////////////////////
 
   // private fetchDatafromSharePointList() {
   //   let siteUrl = this.props.context.pageContext.web.absoluteUrl;
@@ -136,10 +142,28 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
   //     });
   // }
 
+
+
+  //Open new component
+
+  private OpenCommonAddEditComponentClick = (id: any): void => {
+    //console.log(this.state.isAddButton);
+    this.setState({ showModal: true }, () => {
+      console.log(this.state);
+    });
+  }
+
+  private _closeModal = (): void => {
+    this.setState({ showModal: false });
+  }
+
+
   public render(): React.ReactElement<IgridProps> {
 
-    const { disabled, checked, drpOptions, editItem, items } = this.state;
+    const { disabled, checked, drpOptions, editItem, items, addEditId } = this.state;
 
+
+    //Used for grid collumn and Data component
     const viewFields: IViewField[] = [
       {
         name: 'Contact_x0020_Name',
@@ -180,12 +204,10 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
     ];
 
 
-
-
     return (
       <div>
-        Hi
-                <ListView
+        <DefaultButton secondaryText="Add + " onClick={e => this.OpenCommonAddEditComponentClick(0)} text="Add +" />
+        <ListView
           items={items}
           viewFields={viewFields}
           iconFieldName="ServerRelativeUrl"
@@ -196,7 +218,26 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
           defaultFilter=""
           filterPlaceHolder="Search..."
           groupByFields={groupByFields} />
-      </div>
+
+
+
+        <Modal
+          titleAriaId="titleId"
+          subtitleAriaId="subtitleId"
+          isOpen={this.state.showModal}
+          onDismiss={this._closeModal}
+          isBlocking={false}
+          containerClassName="ms-modalExample-container"
+        >
+          <div className="ms-modalExample-body">
+            <DefaultButton onClick={this._closeModal} text="Close" />
+            <ParentComponent context={this.props.context} parentAddEditId={this.state.addEditId}></ParentComponent>
+          </div>
+          <div id="subtitleId" className="ms-modalExample-body">
+            <DefaultButton onClick={this._closeModal} text="Close" />
+          </div>
+        </Modal>
+      </div >
     );
   }
 }

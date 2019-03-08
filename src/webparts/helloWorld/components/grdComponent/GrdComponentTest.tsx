@@ -30,21 +30,24 @@ import { ListView, IViewField, SelectionMode, GroupOrder, IGrouping } from "@pnp
 import Utility from './../../lib/Utility';
 export default class GrdComponentTest extends React.Component<IgridProps, IGrdState, any> {
 
+
   constructor(props: IgridProps) {
     super(props);
 
     this.state = {
-      panelOpen: false,
+      showModal: false,
+      addEditId: 0,
       disabled: false,
       checked: false,
       selectedItem: null,
       hideDialog: true,
-      showModal: false,
       drpOptions: [],
       ID: 0,
       Contact_x0020_Name: "",
       CSN_x0020__x0023_: "",
       Ship_x0020_To_x0020_Address: "",
+      editLink: "",
+      filrUrl: "",
       items: [
         {
           Id: 0,
@@ -57,7 +60,6 @@ export default class GrdComponentTest extends React.Component<IgridProps, IGrdSt
       editItem: { Company: '', Contact: '', Country: { Id: 0, CountryName: '' }, Id: 0, fileContent: null, isEditable: false }
     } as IGrdState;
   }
-
 
   private _getSelection(items: any[]) {
     console.log('Selected items:', items);

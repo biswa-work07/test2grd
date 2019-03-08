@@ -9,6 +9,8 @@ export interface IItemGrd {
 
 
 export interface IGrdState {
+    showModal:boolean;
+    addEditId:number;
     disabled: boolean;
     checked: boolean;
     drpOptions: Array<any>;
@@ -21,4 +23,5 @@ export interface IGrdState {
     editItem?: IItemGrd;
     editLink?:string;
     ServerRelativeUrl?:string;
+    
 }

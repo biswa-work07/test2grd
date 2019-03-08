@@ -13,6 +13,7 @@ export interface ICountry {
 }
 
 export interface IparentState {
+    pId?: number;
     disabled: boolean;
     checked: boolean;
     drpOptions: Array<any>;

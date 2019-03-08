@@ -1,4 +1,4 @@
 export interface IpatentProps {
-    showModal : boolean;
+    parentAddEditId:number;
     context:any;
 }
