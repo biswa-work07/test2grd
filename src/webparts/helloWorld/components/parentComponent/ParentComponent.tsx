@@ -4,7 +4,7 @@ import { IItem, ICountry, IparentState } from './IparentState';
 import { escape } from '@microsoft/sp-lodash-subset';
 import pnp from "sp-pnp-js";
 
-
+import { TextField, MaskedTextField } from 'office-ui-fabric-react/lib/TextField';
 
 export default class ParentComponent extends React.Component<IpatentProps, IparentState, any> {
 
@@ -16,15 +16,93 @@ export default class ParentComponent extends React.Component<IpatentProps, Ipare
         return (
             <div>
                 <b> Hi, I am Parent .</b>
+
                 {
-                    editCollectionItems.length > 0 ? (
-                        editCollectionItems.map((item) => <div>Edit Mode :
+                    editCollectionItems.length > 0 ?
+                        (
+                            editCollectionItems.map((item) => <div>Edit Mode :
                            <span className='indent' key={item}>{item["ID"]},</span>
-                        </div>)
-                    ) : (
+                            </div>)
+                        )
+                        :
+                        (
                             <div>Add mode</div>
                         )
                 }
+
+                <table>
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>Requested By </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Account Name</td>
+                        <td>
+                            <TextField label="With error message" errorMessage="Error message" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>CSN #</td>
+                        <td>
+                            <TextField label="With error message" errorMessage="Error message" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ship To Address</td>
+                        <td>
+                            <TextField label="With error message" errorMessage="Error message" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>Part #</td>
+                                    <td>
+                                        Description
+                                    </td>
+                                    <td>
+                                        Qty.
+                                    </td>
+                                    <td>
+                                        RLD
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <TextField label="With error message" errorMessage="Error message" />
+                                    </td>
+                                    <td>
+                                        <TextField label="With error message" errorMessage="Error message" />
+                                    </td>
+                                    <td>
+                                        <TextField label="With error message" errorMessage="Error message" />
+                                    </td>
+                                    <td>
+                                        <TextField label="With error message" errorMessage="Error message" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            
+                        </td>
+                    </tr>
+                </table>
 
                 <hr></hr>
             </div>

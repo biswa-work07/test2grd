@@ -254,15 +254,10 @@ export default class GrdComponent extends React.Component<IgridProps, IGrdState,
             <ParentComponent context={this.props.context} parentAddEditId={this.state.addEditId} editCollectionItems={editCollectionItems}   ></ParentComponent>
           </div>
 
-
-
-
-
-
-          
           <div id="subtitleId" className="ms-modalExample-body">
             <DefaultButton onClick={this._closeModal} text="Close" />
           </div>
+
         </Modal>
       </div >
     );
